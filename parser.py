@@ -12,21 +12,38 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 
 
-def search_in_wb(search_words):
-    options = webdriver.ChromeOptions()
-    options.add_argument("--window-size=1366,768")
-    options.add_argument("user-agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0")
-    options.add_argument("--disable-blink-features=AutomationControlled")
-    driver = webdriver.Chrome(
-        executable_path="C:/chromedriver.exe",
-        options=options
+options = webdriver.ChromeOptions()
+options.add_argument("--window-size=1366,768")
+options.add_argument("user-agent=Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:84.0) Gecko/20100101 Firefox/84.0")
+options.add_argument("--disable-blink-features=AutomationControlled")
+driver = webdriver.Chrome(
+    executable_path="C:/chromedriver.exe",
+    options=options
     )
+
+
+def search_in_wb(search_words):
     driver.get('https://www.wildberries.ru/')
     sleep(2)
     search = driver.find_element(By.CSS_SELECTOR, '#searchInput')
     search.send_keys(search_words)
     search.send_keys(Keys.ENTER)
     sleep(1)
+
+
+def find_item_in_page():
+    items = driver.find_elements(By.CLASS_NAME, 'product-card__main')
+    article_list = []
+    for i in items:
+        link = i.get_attribute('href')
+        article = link.split(sep = '/', maxsplit = -1)[4]
+        article_list.append(article)
+    return('Все артикулы найдены')
+    print(article_list)
+
+search_in_wb('омега')
+find_item_in_page()
+
 
 # driver.implicitly_wait(10)
 # button_apply = driver.find_element(By.XPATH, '//*[@id="applySearchBtn"]').click()
@@ -45,11 +62,3 @@ def search_in_wb(search_words):
 # link = item.get_attribute('href')
 # article = link.split(sep = '/', maxsplit = -1)[4]
 # print(article)
-
-items = driver.find_elements(By.CLASS_NAME, 'product-card__main')
-article_list = []
-for i in items:
-    link = i.get_attribute('href')
-    article = link.split(sep = '/', maxsplit = -1)[4]
-    article_list.append(article)
-print(article_list)
