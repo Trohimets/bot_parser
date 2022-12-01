@@ -28,21 +28,25 @@ def search_in_wb(search_words):
     search = driver.find_element(By.CSS_SELECTOR, '#searchInput')
     search.send_keys(search_words)
     search.send_keys(Keys.ENTER)
-    sleep(1)
+    sleep(4)
 
 
-def find_item_in_page():
+def find_item_in_page(article):
     items = driver.find_elements(By.CLASS_NAME, 'product-card__main')
     article_list = []
     for i in items:
         link = i.get_attribute('href')
-        article = link.split(sep = '/', maxsplit = -1)[4]
-        article_list.append(article)
-    return('Все артикулы найдены')
-    print(article_list)
+        article_item = link.split(sep = '/', maxsplit = -1)[4]
+        article_list.append(article_item)
+        if article_item == article:
+            return len(article_list)
+    return -1
 
-search_in_wb('омега')
-find_item_in_page()
+
+
+
+# search_in_wb('омега')
+# find_item_in_page()
 
 
 # driver.implicitly_wait(10)
